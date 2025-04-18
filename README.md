@@ -92,6 +92,7 @@ START:
     MOV AL, NUM1
     IMUL NUM2
     MOV RESULT, AX
+
     MOV AH, 4CH
     INT 21H
 CODE ENDS
@@ -116,6 +117,7 @@ BACK:
 SKIP_CARRY:
     INC SI
     LOOP BACK
+
     MOV [SI], AX
     MOV AH, 4CH
     INT 21H
@@ -141,6 +143,7 @@ BACK:
 NEXT:
     INC SI
     LOOP BACK
+
     MOV [SI], AL
     MOV AH, 4CH
     INT 21H
@@ -166,6 +169,7 @@ BACK:
 NEXT:
     INC SI
     LOOP BACK
+
     MOV [SI], AL
     MOV AH, 4CH
     INT 21H
@@ -181,13 +185,17 @@ CODE SEGMENT
 START:
     MOV AX, 2500H
     MOV DS, AX
+
     MOV AX, 4900H
     MOV ES, AX
+
     MOV SI, 0000H
     MOV DI, 0000H
+
     MOV CX, 000AH
     CLD
     REP MOVSB
+
     MOV AH, 4CH
     INT 21H
 CODE ENDS
@@ -202,7 +210,7 @@ CODE SEGMENT
 START:
     MOV AX, 2000H
     MOV DS, AX
-    MOV CH, 04H
+    MOV CH, 00H
 BACK2:
     MOV CL, 04H
     MOV SI, 5000H
@@ -211,10 +219,9 @@ BACK1:
     MOV AH, [SI+1]
     CMP AL, AH
     JC NEXT
-    MOV AL, [SI]
-    MOV AH, [SI+1]
-    MOV [SI], AH
+    JZ NEXT
     MOV [SI+1], AL
+    MOV [SI], AH
 NEXT:
     INC SI
     DEC CL
@@ -244,16 +251,18 @@ BACK1:
     MOV AH, [SI+1]
     CMP AL, AH
     JNC NEXT
-    MOV AL, [SI]
-    MOV AH, [SI+1]
-    MOV [SI], AH
+    JZ NEXT
     MOV [SI+1], AL
+    MOV [SI], AH
+
 NEXT:
     INC SI
     DEC CL
     JNZ BACK1
+
     DEC CH
     JNZ BACK2
+
     MOV AH, 4CH
     INT 21H
 CODE ENDS
@@ -308,7 +317,7 @@ DATA SEGMENT
 DATA ENDS
 
 EXTRA SEGMENT
-    STRING2 DB 0TH DUP (?)
+    STRING2 DB 07H DUP (?)
 EXTRA ENDS
 
 CODE SEGMENT
@@ -321,7 +330,7 @@ START:
     MOV ES, AX
 
     LEA SI, STRING1
-    LEA DI, STRING2 + 64H
+    LEA DI, STRING2 + 06H
     MOV CX, 0007H
 
 BACK:
@@ -387,7 +396,7 @@ BACK:
 MOV AL, [SI]
 ADD AL, 00H
 JZ ZERO
-ROL AL, 1
+ROL AL, 01H
 JC NEGATIVE
 INC BL
 JMP NEXT
